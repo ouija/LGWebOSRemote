@@ -10,6 +10,7 @@ import os
 import sys
 import urllib
 
+script_path = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 hello_data = {
     "id": "register_0",
@@ -190,8 +191,8 @@ class LGTVClient(WebSocketClient):
     def __init__(self, hostname=None):
         self.__command_count = 0
         self.__waiting_callback = None
-        if os.path.exists(os.path.expanduser("~/.lgtv.json")):
-            f = open(os.path.expanduser("~/.lgtv.json"))
+        if os.path.exists(os.path.expanduser(script_path+"/.lgtv.json")):
+            f = open(os.path.expanduser(script_path+"/.lgtv.json"))
             settings = json.loads(f.read())
             f.close()
             self.__hostname = settings['hostname']
@@ -202,14 +203,15 @@ class LGTVClient(WebSocketClient):
                 self.__macAddress = getMacAddress(self.__ip)
                 self.__store_settings()
         else:
-            self.__hostname = hostname
-            if hostname is not None:
-                self.__clientKey = None
-                self.__ip = resolveHost(hostname)
-                self.__macAddress = getMacAddress(self.__ip)
-                self.__store_settings()
-            else:
-                self.__ip = None
+            # ERROR: NO CONFIG FILES
+            print "Error: No configuration file found!"
+            print ""
+            print "You need to pair the script to your LGwebOSTV TV by running the command:"
+            print ""
+            print "python lg.py auth <ip address of tv>"
+            print ""
+            print ""
+            sys.exit()
         self.__handshake_done = False
         super(LGTVClient, self).__init__('ws://' + self.__hostname + ':3000/', exclude_headers=["Origin"])
         self.__waiting_command = None
@@ -236,7 +238,7 @@ class LGTVClient(WebSocketClient):
             "ip": self.__ip,
             "hostname": self.__hostname
         }
-        f = open(os.path.expanduser("~/.lgtv.json"), "w")
+        f = open(os.path.expanduser(script_path+"/.lgtv.json"), "w")
         f.write(json.dumps(data))
         f.close()
 

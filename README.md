@@ -1,17 +1,23 @@
-# LGWebOSRemote
+# LGWebOSRemote (@ouija fork)
 Command line webOS remote for LGTVs. This tool uses a connection via websockets to port 3000 on newer LG TVs, there are other tools which use a restful connection to port 8080 however that port is closed on newer firmware versions.
+
+## ouija fork changes: 
+
+This version saves the configuration file under the same folder path as the script itself; Not under the user home directory.
 
 ## Supported models
 
 ### Tested with
 
-UF830V, [please add more!]
+UF830V, UJ6570, [please add more!]
 
 Tested with python 2.7 on mac/linux and works fine, your mileage may vary with windows, patches welcome.
 
 ### Likely supports
 
 All devices with firmware major version 4, product name "webOSTV 2.0"
+
+Also tested with @ouija with "webOSTV 3.5"
 
 ## Available Commands
     scan
@@ -76,5 +82,12 @@ You need to auth with the TV before being able to use the on command as it requi
 
 ## Bugs
 
-I couldn't test youtube because it seems the app isn't installed and not available to download right now
-maybe they're updating it?
+YouTube doesn't appear to work via the openYoutubeURL or openYoutubeId command with "webOSTV 3.5"
+I believe it is because YouTube needs to be paired with the device and this script currently doesn't support that.
+
+I found some examples of this 'pairing' method in other sources:
+
+- https://github.com/ConnectSDK/Connect-SDK-iOS-Core/blob/master/Services/WebOSTVService.m
+- https://github.com/ConnectSDK/Connect-SDK-Android-Core/blob/master/src/com/connectsdk/service/WebOSTVService.java
+- https://github.com/ConnectSDK/Connect-SDK-Android-Core/pull/93/files?diff=split&short_path=04c6e90&unchanged=expanded
+- https://www.programcreek.com/java-api-examples/index.php?api=com.connectsdk.core.AppInfo

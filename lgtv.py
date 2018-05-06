@@ -1,15 +1,16 @@
 from __future__ import print_function
 import sys
+import os
 import json
 from inspect import getargspec
 from LGTV import LGTVScan, LGTVClient, getCommands
 
+os.system('clear')
+print ("LGWebOSRemote [@ouija fork / original script by Karl Lattimer]")
 
 def usage(error=None):
     if error:
         print ("Error: " + error)
-    print ("LGTV Controller")
-    print ("Author: Karl Lattimer <karl@qdh.org.uk>")
     print ("Usage: lgtv <command> [parameter]\n")
     print ("Available Commands:")
 
