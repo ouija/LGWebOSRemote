@@ -17,7 +17,7 @@ Tested with python 2.7 on mac/linux and works fine, your mileage may vary with w
 
 All devices with firmware major version 4, product name "webOSTV 2.0"
 
-Also tested with @ouija with "webOSTV 3.5"
+Also tested by @ouija with "webOSTV 3.5"
 
 ## Available Commands
     scan
