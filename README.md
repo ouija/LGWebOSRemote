@@ -91,3 +91,5 @@ I found some examples of this 'pairing' method in other sources:
 - https://github.com/ConnectSDK/Connect-SDK-Android-Core/blob/master/src/com/connectsdk/service/WebOSTVService.java
 - https://github.com/ConnectSDK/Connect-SDK-Android-Core/pull/93/files?diff=split&short_path=04c6e90&unchanged=expanded
 - https://www.programcreek.com/java-api-examples/index.php?api=com.connectsdk.core.AppInfo
+
+I also found the "mute" command does not work unless invoked with the command `python lgtv.py mute muted` and then a volumeUp or volumeDown command will unmute.
