@@ -202,7 +202,7 @@ class LGTVClient(WebSocketClient):
             if not self.__macAddress and self.__ip is not None:
                 self.__macAddress = getMacAddress(self.__ip)
                 self.__store_settings()
-        else:
+        elif not os.path.exists(os.path.expanduser(script_path+"/.lgtv.json")) and sys.argv[1].lower() != "auth":
             # ERROR: NO CONFIG FILES
             print "Error: No configuration file found!"
             print ""
@@ -212,6 +212,15 @@ class LGTVClient(WebSocketClient):
             print ""
             print ""
             sys.exit()
+        else:
+            self.__hostname = hostname
+            if hostname is not None:
+                self.__clientKey = None
+                self.__ip = resolveHost(hostname)
+                self.__macAddress = getMacAddress(self.__ip)
+                self.__store_settings()
+            else:
+                self.__ip = None
         self.__handshake_done = False
         super(LGTVClient, self).__init__('ws://' + self.__hostname + ':3000/', exclude_headers=["Origin"])
         self.__waiting_command = None
