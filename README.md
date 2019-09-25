@@ -4,6 +4,7 @@ Command line webOS remote for LGTVs. This tool uses a connection via websockets 
 ## ouija fork changes: 
 
 This version saves the configuration file under the same folder path as the script itself; Not under the user home directory.
+ADDED: *notificationWithIcon* command, allows png image url to be defined with notification.
 
 ## Supported models
 
@@ -41,6 +42,7 @@ Also tested by @ouija with "webOSTV 3.5"
     listServices          
     mute                  muted
     notification          message
+    nofificationWithIcon  message url
     off                   
     on                    
     openAppWithPayload    payload

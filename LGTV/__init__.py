@@ -9,6 +9,9 @@ import re
 import os
 import sys
 import urllib
+import urllib2
+import base64
+
 
 script_path = os.path.dirname(os.path.realpath(sys.argv[0]))
 
@@ -314,6 +317,11 @@ class LGTVClient(WebSocketClient):
 
     def notification(self, message, callback=None):
         self.__send_command("", "request", "ssap://system.notifications/createToast", {"message": message}, callback)
+
+    def notificationWithIcon(self, message, url, callback=None):
+        contents = urllib2.urlopen(url).read()
+        data = base64.b64encode(contents)
+        self.__send_command("", "request", "ssap://system.notifications/createToast", {"iconData":data,"iconExtension":"png","message": message}, callback)
 
     def mute(self, muted=True, callback=None):
         self.__send_command("", "request", "ssap://audio/setMute", {"mute": muted}, callback)
