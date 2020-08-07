@@ -4,9 +4,9 @@ Command line webOS remote for LGTVs. This tool uses a connection via websockets 
 ## ouija fork changes: 
 
 This version saves the configuration file under the same folder path as the script itself; Not under the user home directory.
-ADDED: *notificationWithIcon* command, allows png image url to be passed with notification message.
-ADDED: *notificationWithRTSP* command, allows fetching thumbnail from rtsp stream to be passed with notification message
-       _(note that this requires both ffmpeg v4.2.2> and base64 [coreutils-base64] packages installed!)_
+<br><br>
+**NEW:** *notificationWithIcon* command, allows png image url to be passed with notification message.<br>
+**NEW:** *notificationWithRTSP* command, allows fetching thumbnail from rtsp stream to be passed with notification message _(note that this requires both **ffmpeg v4.2.2>** and **base64 [coreutils-base64]** packages installed to work correctly!)_
 
 ## Supported models
 
@@ -14,7 +14,7 @@ ADDED: *notificationWithRTSP* command, allows fetching thumbnail from rtsp strea
 
 UF830V, UJ6570, [please add more!]
 
-Updated to work with python 3.8.3 on linux (QNAP w/Entware), your milage may vary.
+Updated to work with **Python 3.8.3** on Linux (QNAP w/Entware), your milage may vary.
 
 ### Likely supports
 
