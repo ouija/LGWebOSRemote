@@ -8,8 +8,8 @@ import subprocess
 import re
 import os
 import sys
-import urllib
-import urllib2
+import urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.error, urllib.parse
 import base64
 
 
@@ -57,8 +57,8 @@ hello_data = {
                 "created": "20140509",
                 "localizedAppNames": {
                     "": "LG Remote App",
-                    "ko-KR": u"리모컨 앱",
-                    "zxx-XX": u"ЛГ Rэмotэ AПП"
+                    "ko-KR": "리모컨 앱",
+                    "zxx-XX": "ЛГ Rэмotэ AПП"
                 },
                 "localizedVendorNames": {
                     "": "LG Electronics"
@@ -118,7 +118,7 @@ def LGTVScan(first_only=False):
                 if line.startswith("DLNADeviceName"):
                     (junk, data) = line.split(':')
                     data = data.strip()
-                    data = urllib.unquote(data)
+                    data = urllib.parse.unquote(data)
                     model = re.findall(r'\[LG\] webOS TV (.*)', data)[0]
                 data = {
                     'uuid': uuid,
@@ -126,7 +126,7 @@ def LGTVScan(first_only=False):
                     'address': address[0]
                 }
         except Exception as e:
-            print e.message
+            print(e.message)
             attempts -= 1
             continue
 
@@ -166,7 +166,7 @@ def getMacAddress(address):
 
 
 def methods(cls):
-    return [x for x, y in cls.__dict__.items() if type(y) == FunctionType]
+    return [x for x, y in list(cls.__dict__.items()) if type(y) == FunctionType]
 
 
 def getCommands(cls):
@@ -207,13 +207,13 @@ class LGTVClient(WebSocketClient):
                 self.__store_settings()
         elif not os.path.exists(os.path.expanduser(script_path+"/.lgtv.json")) and sys.argv[1].lower() != "auth":
             # ERROR: NO CONFIG FILES
-            print "Error: No configuration file found!"
-            print ""
-            print "You need to pair the script to your LGwebOSTV TV by running the command:"
-            print ""
-            print "python lg.py auth <ip address of tv>"
-            print ""
-            print ""
+            print("Error: No configuration file found!")
+            print("")
+            print("You need to pair the script to your LGwebOSTV TV by running the command:")
+            print("")
+            print("python lg.py auth <ip address of tv>")
+            print("")
+            print("")
             sys.exit()
         else:
             self.__hostname = hostname
@@ -230,16 +230,16 @@ class LGTVClient(WebSocketClient):
 
     def __exec_command(self):
         if self.__handshake_done is False:
-            print "Error: Handshake failed"
-        if self.__waiting_command is None or len(self.__waiting_command.keys()) == 0:
+            print("Error: Handshake failed")
+        if self.__waiting_command is None or len(list(self.__waiting_command.keys())) == 0:
             self.close()
             return
-        command = self.__waiting_command.keys()[0]
+        command = list(self.__waiting_command.keys())[0]
         args = self.__waiting_command[command]
         self.__class__.__dict__[command](self, **args)
 
     def exec_command(self, command, args):
-        if command not in self.__class__.__dict__.keys():
+        if command not in list(self.__class__.__dict__.keys()):
             usage("Invalid command")
         self.__waiting_command = {command: args}
 
@@ -263,12 +263,12 @@ class LGTVClient(WebSocketClient):
         self.send(json.dumps(hello_data))
 
     def closed(self, code, reason=None):
-        print json.dumps({
+        print(json.dumps({
             "closing": {
                 "code": code,
-                "reason": reason
+                "reason": reason.decode('utf-8')
             }
-        })
+        }))
 
     def received_message(self, response):
         if self.__waiting_callback:
@@ -277,28 +277,28 @@ class LGTVClient(WebSocketClient):
     def __defaultHandler(self, response):
         # {"type":"response","id":"0","payload":{"returnValue":true}}
         if response['type'] == "error":
-            print json.dumps(response)
+            print(json.dumps(response))
             self.close()
         if "returnValue" in response["payload"] and response["payload"]["returnValue"] is True:
-            print json.dumps(response)
+            print(json.dumps(response))
             self.close()
         else:
-            print json.dumps(response)
+            print(json.dumps(response))
 
     def __prompt(self, response):
         # {"type":"response","id":"register_0","payload":{"pairingType":"PROMPT","returnValue":true}}
         if response['payload']['pairingType'] == "PROMPT":
-            print "Please accept the pairing request on your LG TV"
+            print("Please accept the pairing request on your LG TV")
             self.__waiting_callback = self.__set_client_key
 
     def __handshake(self, response):
-        if 'client-key' in response['payload'].keys():
+        if 'client-key' in list(response['payload'].keys()):
             self.__handshake_done = True
             self.__exec_command()
 
     def __set_client_key(self, response):
         # {"type":"registered","id":"register_0","payload":{"client-key":"a40635497f685492b8366e208808a86b"}}
-        if 'client-key' in response['payload'].keys():
+        if 'client-key' in list(response['payload'].keys()):
             self.__clientKey = response['payload']['client-key']
             self.__waiting_callback = None
             self.__store_settings()
@@ -306,7 +306,7 @@ class LGTVClient(WebSocketClient):
 
     def on(self):
         if not self.__macAddress:
-            print "Client must have been powered on and paired before power on works"
+            print("Client must have been powered on and paired before power on works")
         wol.send_magic_packet(self.__macAddress)
 
     def off(self):
@@ -315,11 +315,15 @@ class LGTVClient(WebSocketClient):
     def openBrowserAt(self, url, callback=None):
         self.__send_command("", "request", "ssap://system.launcher/open", {"target": url}, callback)
 
+    def notificationWithRTSP(self, message, url, callback=None):
+        doorbellImage = os.popen("ffmpeg -loglevel panic -y -i {0} -s 80x80 -vframes 1 -c:v png -f image2pipe - | base64 -w 0".format(url)).read()
+        self.__send_command("", "request", "ssap://system.notifications/createToast", {"iconData":doorbellImage,"iconExtension":"png","message": message}, callback)
+
     def notification(self, message, callback=None):
         self.__send_command("", "request", "ssap://system.notifications/createToast", {"message": message}, callback)
 
     def notificationWithIcon(self, message, url, callback=None):
-        contents = urllib2.urlopen(url).read()
+        contents = urllib.request.urlopen(url).read()
         data = base64.b64encode(contents)
         self.__send_command("", "request", "ssap://system.notifications/createToast", {"iconData":data,"iconExtension":"png","message": message}, callback)
 

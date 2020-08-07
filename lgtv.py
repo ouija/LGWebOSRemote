@@ -1,8 +1,8 @@
-from __future__ import print_function
+
 import sys
 import os
 import json
-from inspect import getargspec
+from inspect import getfullargspec
 from LGTV import LGTVScan, LGTVClient, getCommands
 
 os.system('clear')
@@ -20,12 +20,12 @@ def usage(error=None):
     for c in getCommands(LGTVClient):
         print ("  " + c, end=" ")
         print (" " * (20 - len(c)), end=" ")
-        args = getargspec(LGTVClient.__dict__[c])
+        args = getfullargspec(LGTVClient.__dict__[c])
         print (' '.join(args.args[1:-1]))
 
 
 def parseargs(command, argv):
-    args = getargspec(LGTVClient.__dict__[command])
+    args = getfullargspec(LGTVClient.__dict__[command])
     args = args.args[1:-1]
 
     if len(args) != len(argv):
@@ -55,6 +55,21 @@ def parseargs(command, argv):
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         usage("Too few arguments")
+    elif sys.argv[1] == "notificationWithRTSP" or sys.argv[1] == "notificationWithIcon":
+        if len(sys.argv) < 4:
+            usage("message and url required for {0}".format(sys.argv[1]))
+        else:
+            try:
+                ws = LGTVClient()
+                try:
+                    args = parseargs(sys.argv[1], sys.argv[2:])
+                except Exception as e:
+                    usage(e.message)
+                ws.connect()
+                ws.exec_command(sys.argv[1], args)
+                ws.run_forever()
+            except KeyboardInterrupt:
+                ws.close()
     elif sys.argv[1] == "scan":
         results = LGTVScan()
         if len(results) > 0:

@@ -4,7 +4,9 @@ Command line webOS remote for LGTVs. This tool uses a connection via websockets 
 ## ouija fork changes: 
 
 This version saves the configuration file under the same folder path as the script itself; Not under the user home directory.
-ADDED: *notificationWithIcon* command, allows png image url to be defined with notification.
+ADDED: *notificationWithIcon* command, allows png image url to be passed with notification message.
+ADDED: *notificationWithRTSP* command, allows fetching thumbnail from rtsp stream to be passed with notification message
+       _(note that this requires both ffmpeg v4.2.2> and base64 [coreutils-base64] packages installed!)_
 
 ## Supported models
 
@@ -12,7 +14,7 @@ ADDED: *notificationWithIcon* command, allows png image url to be defined with n
 
 UF830V, UJ6570, [please add more!]
 
-Tested with python 2.7 on mac/linux and works fine, your mileage may vary with windows, patches welcome.
+Updated to work with python 3.8.3 on linux (QNAP w/Entware), your milage may vary.
 
 ### Likely supports
 
@@ -22,7 +24,7 @@ Also tested by @ouija with "webOSTV 3.5"
 
 ## Available Commands
     scan
-    auth                  Hostname/IP     Authenticate and exit, creates initial config ~/.lgtv.json
+    auth                  Hostname/IP     _Authenticate and exit, creates initial config ~/.lgtv.json_
     audioStatus           
     audioVolume           
     closeApp              appid
@@ -43,6 +45,7 @@ Also tested by @ouija with "webOSTV 3.5"
     mute                  muted
     notification          message
     nofificationWithIcon  message url
+    notificationWithRTSP  message url
     off                   
     on                    
     openAppWithPayload    payload
