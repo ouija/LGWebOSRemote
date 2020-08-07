@@ -24,7 +24,7 @@ Also tested by @ouija with "webOSTV 3.5"
 
 ## Available Commands
     scan
-    auth                  Hostname/IP     _Authenticate and exit, creates initial config ~/.lgtv.json_
+    auth                  Hostname/IP     Authenticate and exit, creates initial config ~/.lgtv.json
     audioStatus           
     audioVolume           
     closeApp              appid
@@ -44,8 +44,8 @@ Also tested by @ouija with "webOSTV 3.5"
     listServices          
     mute                  muted
     notification          message
-    nofificationWithIcon  message url
-    notificationWithRTSP  message url
+    nofificationWithIcon  message  url
+    notificationWithRTSP  message  url
     off                   
     on                    
     openAppWithPayload    payload
