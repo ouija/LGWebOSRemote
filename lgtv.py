@@ -8,6 +8,23 @@ from LGTV import LGTVScan, LGTVClient, getCommands
 os.system('clear')
 print ("LGWebOSRemote [@ouija fork / original script by Karl Lattimer]")
 
+def which(program):
+    import os
+    def is_exe(fpath):
+        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+
+    fpath, fname = os.path.split(program)
+    if fpath:
+        if is_exe(program):
+            return program
+    else:
+        for path in os.environ["PATH"].split(os.pathsep):
+            exe_file = os.path.join(path, program)
+            if is_exe(exe_file):
+                return exe_file
+
+    return None
+
 def usage(error=None):
     if error:
         print ("Error: " + error)
@@ -58,6 +75,8 @@ if __name__ == '__main__':
     elif sys.argv[1] == "notificationWithRTSP" or sys.argv[1] == "notificationWithIcon":
         if len(sys.argv) < 4:
             usage("message and url required for {0}".format(sys.argv[1]))
+        elif not which("ffmpeg") or not which("base64") and sys.argv[1] == "notificationWithRTSP":
+            usage("ffmpeg or base64 NOT found and required for {0}".format(sys.argv[1]))
         else:
             try:
                 ws = LGTVClient()
