@@ -44,7 +44,7 @@ Also tested by @ouija with "webOSTV 3.5"
     listServices          
     mute                  muted
     notification          message
-    nofificationWithURL  message  url
+    nofificationWithURL   message  url
     off                   
     on                    
     openAppWithPayload    payload
