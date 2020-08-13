@@ -72,10 +72,10 @@ def parseargs(command, argv):
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         usage("Too few arguments")
-    elif sys.argv[1] == "notificationWithRTSP" or sys.argv[1] == "notificationWithIcon":
+    elif sys.argv[1] == "notificationWithURL": #or sys.argv[1] == "notificationWithIcon":
         if len(sys.argv) < 4:
             usage("message and url required for {0}".format(sys.argv[1]))
-        elif not which("ffmpeg") or not which("base64") and sys.argv[1] == "notificationWithRTSP":
+        elif not which("ffmpeg") or not which("base64") and sys.argv[1] == "notificationWithURL":
             usage("ffmpeg or base64 NOT found and required for {0}".format(sys.argv[1]))
         else:
             try:

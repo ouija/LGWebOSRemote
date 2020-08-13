@@ -9,7 +9,6 @@ import re
 import os
 import sys
 import urllib.request, urllib.parse, urllib.error
-import urllib.request, urllib.error, urllib.parse
 import base64
 
 
@@ -315,17 +314,17 @@ class LGTVClient(WebSocketClient):
     def openBrowserAt(self, url, callback=None):
         self.__send_command("", "request", "ssap://system.launcher/open", {"target": url}, callback)
 
-    def notificationWithRTSP(self, message, url, callback=None):
-        doorbellImage = os.popen("ffmpeg -loglevel panic -y -i {0} -s 80x80 -vframes 1 -c:v png -f image2pipe - | base64 -w 0".format(url)).read()
+    def notificationWithURL(self, message, url, callback=None):
+        doorbellImage = os.popen("ffmpeg -loglevel panic -y -i \"{0}\" -s 80x80 -vframes 1 -c:v png -f image2pipe - | base64 -w 0".format(url)).read()
         self.__send_command("", "request", "ssap://system.notifications/createToast", {"iconData":doorbellImage,"iconExtension":"png","message": message}, callback)
 
     def notification(self, message, callback=None):
         self.__send_command("", "request", "ssap://system.notifications/createToast", {"message": message}, callback)
 
-    def notificationWithIcon(self, message, url, callback=None):
-        contents = urllib.request.urlopen(url).read()
-        data = base64.b64encode(contents)
-        self.__send_command("", "request", "ssap://system.notifications/createToast", {"iconData":data,"iconExtension":"png","message": message}, callback)
+    #def notificationWithIcon(self, message, url, callback=None):
+    #    contents = urllib.request.urlopen(url).read()
+    #    data = base64.b64encode(contents)
+    #    self.__send_command("", "request", "ssap://system.notifications/createToast", {"iconData":data,"iconExtension":"png","message": message}, callback)
 
     def mute(self, muted=True, callback=None):
         self.__send_command("", "request", "ssap://audio/setMute", {"mute": muted}, callback)
