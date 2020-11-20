@@ -1,6 +1,8 @@
 # LGWebOSRemote (@ouija fork)
 Command line webOS remote for LGTVs. This tool uses a connection via websockets to port 3000 on newer LG TVs, there are other tools which use a restful connection to port 8080 however that port is closed on newer firmware versions.
 
+Please consider [donating](https://paypal.me/djouija) to support this project. Thanks!
+
 ## ouija fork changes: 
 
 This version saves the configuration file under the same folder path as the script itself; Not under the user home directory.
